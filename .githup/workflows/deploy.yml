@@ -1,0 +1,26 @@
+name: Deploy Website
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Connect and deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_IP }}
+          username: ubuntu
+          key: ${{ secrets.VM_SSH_KEY }}
+          script: |
+            cd ~/web || git clone https://github.com/A1haaydarr/web.git web
+            cd web
+            git pull origin main
+            docker build -t myweb .
+            docker stop web || true
+            docker rm web || true
+            docker run -d -p 80:80 --name web  myweb
