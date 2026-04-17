@@ -8,7 +8,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    env:
+      ACTIONS_STEP_DEBUG: true
     steps:
       - name: Connect and deploy
         uses: appleboy/ssh-action@v1.0.3
@@ -16,6 +17,7 @@ jobs:
           host: ${{ secrets.VM_IP }}
           username: ubuntu
           key: ${{ secrets.VM_SSH_KEY }}
+          port: 22
           script: |
             cd ~/web || git clone https://github.com/A1haaydarr/web.git web
             cd web
