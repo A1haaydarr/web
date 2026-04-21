@@ -21,8 +21,8 @@ jobs:
           key: ${{ secrets.VM_SSH_KEY }}
           port: 22
           script: |
-            cd ~/app || git clone https://github.com/A1haaydarr/web.git app
-            cd app
+            cd ~/web || git clone https://github.com/A1haaydarr/web.git web
+            cd web
             git pull origin main
             docker build -t my-website .
             docker stop web || true
