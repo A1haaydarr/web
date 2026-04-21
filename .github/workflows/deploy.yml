@@ -1,4 +1,4 @@
-name: Test SSH
+name: Deploy Website
 
 on:
   push:
@@ -9,14 +9,22 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env:
+      ACTIONS_STEP_DEBUG: true   # í±ˆ PUT IT HERE
+
     steps:
-      - name: Test connection
+      - name: Connect and deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VM_IP }}
           username: ubuntu
           key: ${{ secrets.VM_SSH_KEY }}
           port: 22
-          debug: true
           script: |
-            echo "Connected successfully"
+            cd ~/app || git clone https://github.com/A1haaydarr/web.git app
+            cd app
+            git pull origin main
+            docker build -t my-website .
+            docker stop web || true
+            docker rm web || true
+            docker run -d -p 80:80 --name web my-website
