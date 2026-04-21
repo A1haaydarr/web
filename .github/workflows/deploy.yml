@@ -1,2 +1,10 @@
-script: |
-  echo "Connected successfully"
+- name: Connect and deploy
+  uses: appleboy/ssh-action@v1.0.3
+  with:
+    host: ${{ secrets.VM_IP }}
+    username: ubuntu
+    key: ${{ secrets.VM_SSH_KEY }}
+    port: 22
+    debug: true
+    script: |
+      echo "Connected successfully"
